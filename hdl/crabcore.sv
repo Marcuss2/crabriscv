@@ -9,9 +9,10 @@ module crabcore(
     output reg [31:0] mem_data,
 
     input mem_ready,
+    input mem_write_done,
     input [31:0] mem_input,
 
-    output reg [1:0] io_mode,
+    output reg [2:0] io_mode,
 
     output [31:0] registers_debug [31:0],
     output [31:0] pc_debug,
@@ -36,11 +37,15 @@ assign pc_debug[31:0] = program_counter;
 for (c = 0; c < 32; c++)
     assign registers_debug[c] = register_out[c];
 
-localparam OP_IMM_ARITHM = 7'b0010011;
-localparam OP_REG_ARITHM = 7'b0110011;
-localparam OP_IMM_LOAD   = 7'b0000011;
-localparam OP_STORE =      7'b0100011;
-localparam OP_BRANCH =     7'b1100011;
+localparam OP_IMM_ARITHM =    7'b0010011;
+localparam OP_REG_ARITHM =    7'b0110011;
+localparam OP_IMM_LOAD   =    7'b0000011;
+localparam OP_STORE =         7'b0100011;
+localparam OP_BRANCH =        7'b1100011;
+localparam OP_JUMP =          7'b1101111;
+localparam OP_JUMP_REG =      7'b1100111;
+localparam OP_LOAD_UPPER =    7'b0110111;
+localparam OP_LOAD_UPPER_PC = 7'b0010111;
 
 wire [6:0] opcode = current_instruction[6:0];
 wire [4:0] rd = current_instruction[11:7];
@@ -50,6 +55,7 @@ wire [4:0] rs1 = current_instruction[19:15];
 wire [4:0] rs2 = current_instruction[24:20];
 wire [11:0] i_immediate = current_instruction[31:20];
 wire [11:0] s_immediate = {current_instruction[31:25], current_instruction[11:7]};
+
 wire [12:0] b_immediate;
 assign b_immediate[12] = current_instruction[31];
 assign b_immediate[11] = current_instruction[7];
@@ -57,6 +63,17 @@ assign b_immediate[10:5] = current_instruction[30:25];
 assign b_immediate[4:1] = current_instruction[11:8];
 assign b_immediate[0] = 0;
 wire [31:0] b_imm_extended = {{19{b_immediate[12]}}, b_immediate[12:1], 1'b0};
+
+wire [20:0] j_immediate;
+assign j_immediate[20] = current_instruction[31];
+assign j_immediate[10:1] = current_instruction[30:21];
+assign j_immediate[11] = current_instruction[20];
+assign j_immediate[19:12] = current_instruction[19:12];
+assign j_immediate[0] = 0;
+
+wire [19:0] u_immediate = current_instruction[31:12];
+wire [31:0] u_imm_shifted = {u_immediate, {12{1'b0}}};
+
 wire [31:0] rs1_register = register_out[rs1];
 wire [31:0] rs2_register = register_out[rs2];
 
@@ -90,6 +107,9 @@ localparam EXECUTE_STATE = 1;
 localparam BRANCH_STATE = 2;
 localparam LOAD_STATE = 3;
 localparam AFTERLOAD_STATE = 4;
+localparam STORE_STATE = 5;
+localparam JUMP_STATE = 6;
+localparam ULOAD_STATE = 7;
 
 always @(posedge clk) begin
     if (reset) begin
@@ -102,7 +122,7 @@ always @(posedge clk) begin
         core_state <= FETCH_STATE;
     end else begin
         if (core_state == FETCH_STATE && mem_ready) begin
-            current_instruction <= mem_input;
+            current_instruction = mem_input;
             mem_addr_valid <= 0;
             case (opcode)
                 OP_IMM_ARITHM : begin
@@ -131,8 +151,27 @@ always @(posedge clk) begin
                 end
                 OP_IMM_LOAD : begin
                     mem_addr <= rs1_register + i_immediate;
-                    mem_data_valid <= 1;
+                    mem_addr_valid <= 1;
                     core_state <= LOAD_STATE;
+                end
+                OP_STORE : begin
+                    mem_addr <= rs1_register + s_immediate;
+                    mem_addr_valid <= 1;
+                    mem_data <= rs2_register;
+                    io_mode <= funct3;
+                    mem_data_valid <= 1;
+                    core_state <= STORE_STATE;
+                end
+                OP_JUMP : begin
+                    registers[rd] <= program_counter + 4;
+                    core_state <= JUMP_STATE;
+                end
+                OP_JUMP_REG : begin
+                    registers[rd] <= program_counter + 4;
+                    core_state <= JUMP_STATE;
+                end
+                OP_LOAD_UPPER : begin
+                    core_state <= ULOAD_STATE;
                 end
             endcase
         end else if (core_state == LOAD_STATE && mem_ready) begin
@@ -166,6 +205,32 @@ always @(negedge clk) begin
             program_counter = program_counter + 4;
             mem_addr <= program_counter;
             mem_addr_valid <= 1;
+            core_state <= FETCH_STATE;
+        end
+        STORE_STATE : begin
+            if (mem_write_done) begin
+                program_counter = program_counter + 4;
+                mem_addr <= program_counter;
+                mem_addr_valid <= 1;
+                mem_data_valid <= 0;
+                core_state <= FETCH_STATE;
+            end
+        end
+        JUMP_STATE : begin
+            program_counter = OP_JUMP == opcode 
+                                ? program_counter + j_immediate
+                                : rs1_register + i_immediate;
+            mem_addr <= program_counter;
+            mem_addr_valid <= 1;
+            core_state <= FETCH_STATE;
+        end
+        ULOAD_STATE : begin
+            program_counter = program_counter + 4;
+            mem_addr <= program_counter;
+            mem_addr_valid <= 1;
+            registers[rd] <= opcode == OP_LOAD_UPPER
+                                ? u_imm_shifted
+                                : program_counter + u_imm_shifted;
             core_state <= FETCH_STATE;
         end
         endcase

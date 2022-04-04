@@ -19,18 +19,21 @@ wire [3:0] core_state_debug;
 
 initial $readmemh("addi.txt", memory);
 
-localparam WORD_IO_MODE = 2'h0;
+localparam BYTE_IO_MODE = 2'h0;
 localparam HALF_IO_MODE = 2'h1;
-localparam BYTE_IO_MODE = 2'h2;
+localparam WORD_IO_MODE = 2'h2;
 
-wire [1:0] io_mode;
+wire [2:0] io_mode;
 
-reg [2:0] mem_state;
+reg [2:0] mem_state = IDLE_STATE;
+
+reg mem_write_done = 0;
 
 crabcore core1(.clk(clk), .reset(reset), .mem_addr_valid(mem_addr_valid), .mem_addr(mem_addr),
                .mem_data_valid(mem_data_write_valid), .mem_data(mem_data_write),
                .mem_ready(mem_ready), .mem_input(mem_input), .registers_debug(register_debug),
-               .pc_debug(pc_debug), .core_state_debug(core_state_debug), .io_mode(io_mode));
+               .pc_debug(pc_debug), .core_state_debug(core_state_debug), .io_mode(io_mode),
+               .mem_write_done(mem_write_done));
 
 localparam IDLE_STATE = 0;
 localparam WRITE_STATE = 1;
@@ -47,6 +50,7 @@ always @(negedge clk) begin
             HALF_IO_MODE : memory[mem_addr[14:2]][15:0] <= mem_data_write[15:0];
             BYTE_IO_MODE : memory[mem_addr[14:2]][7:0] <= mem_data_write[7:0];
             endcase
+            mem_write_done <= 1;
         end else if (mem_addr_valid) begin
             mem_state <= READ_STATE;
             mem_input <= memory[mem_addr[14:2]];
