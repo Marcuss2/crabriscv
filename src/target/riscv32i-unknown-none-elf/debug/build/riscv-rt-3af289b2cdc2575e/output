@@ -1,5 +1,0 @@
-cargo:rustc-link-lib=static=riscv-rt
-cargo:rustc-link-search=/home/vrbkam/school/crabriscv/src/target/riscv32i-unknown-none-elf/debug/build/riscv-rt-3af289b2cdc2575e/out
-cargo:rustc-link-search=/home/vrbkam/school/crabriscv/src/target/riscv32i-unknown-none-elf/debug/build/riscv-rt-3af289b2cdc2575e/out
-cargo:rerun-if-changed=build.rs
-cargo:rerun-if-changed=link.x
