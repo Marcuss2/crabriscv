@@ -1,0 +1,4 @@
+cargo:rustc-link-lib=static=riscv
+cargo:rustc-link-search=/home/vrbkam/school/crabriscv/src/target/riscv32i-unknown-none-elf/release/build/riscv-9a4829df22cb25a3/out
+cargo:rustc-cfg=riscv
+cargo:rustc-cfg=riscv32

@@ -1,0 +1,12 @@
+/home/vrbkam/school/crabriscv/src/target/release/deps/proc_macro2-3b13298d22e64639.rmeta: /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/lib.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/marker.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/parse.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/detection.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/fallback.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/wrapper.rs
+
+/home/vrbkam/school/crabriscv/src/target/release/deps/libproc_macro2-3b13298d22e64639.rlib: /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/lib.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/marker.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/parse.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/detection.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/fallback.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/wrapper.rs
+
+/home/vrbkam/school/crabriscv/src/target/release/deps/proc_macro2-3b13298d22e64639.d: /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/lib.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/marker.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/parse.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/detection.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/fallback.rs /home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/wrapper.rs
+
+/home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/lib.rs:
+/home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/marker.rs:
+/home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/parse.rs:
+/home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/detection.rs:
+/home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/fallback.rs:
+/home/vrbkam/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.37/src/wrapper.rs:
