@@ -24,7 +24,11 @@ In order to compile the sample program, you will have to have Rustup and RV32I c
 ### Implementation
 
 This project implements custom bus and custom processor core resembling RV32I instruction set, it is compliant enough to run code without traps
-or debug instructions. The custom bus basically just routes the RAM and one LCD register to the processor.
+or debug instructions. The custom bus basically just routes the RAM and one LCD register to the processor. Main part of the implementation was
+the processor.
+
+The processor itself has its states described with constants, effectively, each instruction group has its own state, which gets set after
+the fetch state, which effectively is the "loading new instruction state"
 
 The implementation seperates the Arithmetic Logical Unit, Load Unit (Processes the loaded data by discarding superfluous bits and bit extends), and
 a branch unit, which just determines if a branch should happen.
