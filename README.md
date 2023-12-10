@@ -2,7 +2,7 @@
 
 ### Goal
 
-This was a school project where the "ideala goal: was an implementation of RISC-V compliant processor.
+This was a school project where the "ideal goal: was an implementation of RISC-V compliant processor.
 
 ### Result
 
